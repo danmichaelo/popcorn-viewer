@@ -4,10 +4,9 @@
   "description": "= Norske epitafier",
   "main": "index.js",
   "scripts": {
-    "start ": "parcel index.html",
-    "build": "parcel build --experimental-scope-hoisting --public-url . index.html",
-    "tailwind": "postcss css/app.pcss -o dist/tailwind.css",
-    "lint": "eslint index.ts components/*" 
+    "start ": "npx parcel src/index.html",
+    "build": "npx parcel build src/index.html",
+    "lint": "npx eslint src/**/*.ts components/**/*.vue"
   },
   "repository": {
     "type": "git",
@@ -28,7 +27,6 @@
     "eslint": "^7.0.0",
     "eslint-plugin-vue": "^6.2.2",
     "parcel": "1.11.0",
-    "postcss-cli": "^7.1.1",
     "postcss-modules": "^2.0.0",
     "postcss-nesting": "^7.0.1",
     "precss": "^4.0.0",
