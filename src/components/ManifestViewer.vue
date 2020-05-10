@@ -26,7 +26,7 @@
         </button>
       </div>
 
-      <div class="flex-grow flex flex-col overflow-auto" style="min-height: 500px;">
+      <div class="flex-grow flex flex-col overflow-auto" style="min-height: 60vh">
         <component v-bind:is="activeViewer" :canvas="activeCanvas" class="flex-grow"></component>
         <app-tabs
           :items="viewers"

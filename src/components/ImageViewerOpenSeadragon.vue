@@ -1,9 +1,10 @@
 <template>
-  <div class="flex flex-col relative">
-    <div ref="viewer" class="flex-grow bg-black text-white"></div>
-    <div v-if="error" class="viewer-error">
-      ERROR: {{ this.error }}
+  <div class="flex flex-col relative h-full">
+    <div class="bg-black text-white absolute top-0 bottom-0 left-0 right-0">
+      <div ref="viewer" class="h-full"></div>
     </div>
+
+    <div v-if="error" class="viewer-error">ERROR: {{ this.error }}</div>
   </div>
 </template>
 
@@ -11,7 +12,7 @@
 import OpenSeadragon from 'openseadragon'
 
 export default {
-  props: { 
+  props: {
     canvas: Object
   },
   data() {

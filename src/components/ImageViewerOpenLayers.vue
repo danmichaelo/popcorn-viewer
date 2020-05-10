@@ -1,9 +1,11 @@
 <template>
-  <div class="flex flex-col relative">
-    <div ref="viewer" class="flex-grow bg-black text-white"></div>
-    <div v-if="error" class="viewer-error">
-      ERROR: {{ this.error }}
+  <div class="flex flex-col relative h-full">
+    <div class="bg-black text-white absolute top-0 bottom-0 left-0 right-0">
+      <div ref="viewer" class="h-full"></div>
     </div>
+
+    <div v-if="error" class="viewer-error">ERROR: {{ this.error }}</div>
+
     <ProgressBar class="iv-pbar" :loading="loading" :loaded="loaded" @done="loading=loaded=0" />
   </div>
 </template>
@@ -12,7 +14,7 @@
 import 'ol/ol.css'
 import Map from 'ol/Map'
 import View from 'ol/View'
-import {defaults as defaultControls, OverviewMap} from 'ol/control'
+import { defaults as defaultControls, OverviewMap } from 'ol/control'
 import TileLayer from 'ol/layer/Tile'
 import IIIF from 'ol/source/IIIF'
 import IIIFInfo from 'ol/format/IIIFInfo'
@@ -20,7 +22,7 @@ import ProgressBar from './ProgressBar'
 
 export default {
   components: {
-    ProgressBar,
+    ProgressBar
   },
   props: {
     canvas: Object
@@ -29,7 +31,7 @@ export default {
     return {
       error: null,
       loading: 0,
-      loaded: 0,
+      loaded: 0
     }
   },
   mounted() {
@@ -58,23 +60,17 @@ export default {
       const overviewLayer = new TileLayer()
 
       const overviewMapControl = new OverviewMap({
-        layers: [
-          overviewLayer,
-        ]
+        layers: [overviewLayer]
       })
 
       this.instance = new Map({
-        layers: [
-          layer,
-        ],
+        layers: [layer],
         target: this.$refs.viewer,
-        controls: defaultControls().extend([
-          overviewMapControl
-        ]),
+        controls: defaultControls().extend([overviewMapControl])
       })
 
       const imageServiceUrl = this.canvas.images[0].resource.service['@id']
-      
+
       fetch(imageServiceUrl)
         .then(response => {
           response
@@ -112,14 +108,14 @@ export default {
                 new View({
                   resolutions: iiifTileSource.getTileGrid().getResolutions(),
                   extent: iiifTileSource.getTileGrid().getExtent(),
-                  constrainOnlyCenter: true,
+                  constrainOnlyCenter: true
                 })
               )
               this.instance
                 .getView()
                 .fit(iiifTileSource.getTileGrid().getExtent())
             })
-            .catch((body) => {
+            .catch(body => {
               this.error = 'Could not read image info json. ' + body
             })
         })
