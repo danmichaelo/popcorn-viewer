@@ -4,7 +4,10 @@
       <div ref="viewer" class="h-full"></div>
     </div>
 
-    <div v-if="error" class="viewer-error">ERROR: {{ this.error }}</div>
+    <div v-if="error" class="viewer-error">
+      ERROR: {{ this.error }}.
+      <a :href="'https://bibsys-k.alma.exlibrisgroup.com/view/UniversalViewer/47BIBSYS_UBO/' + id">Click here</a> for an alternative viewer.
+    </div>
   </div>
 </template>
 
@@ -13,7 +16,8 @@ import OpenSeadragon from 'openseadragon'
 
 export default {
   props: {
-    canvas: Object
+    id: String,
+    canvas: Object,
   },
   data() {
     return {
@@ -56,6 +60,8 @@ export default {
 
         showNavigator: true,
 
+        navigatorPosition: 'BOTTOM_RIGHT',
+
         // We don't want to allow zooming outside of what's filling the window
         minZoomImageRatio: 1.0,
 
@@ -67,7 +73,7 @@ export default {
 
       this.instance.addHandler('tile-load-failed', event => {
         console.log('Tile failed to load', event)
-        this.error = 'Failed to load tile'
+        this.error = 'Failed to load image tile'
       })
 
       this.instance.addHandler('open-failed', () => {

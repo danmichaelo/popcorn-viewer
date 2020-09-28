@@ -25,7 +25,8 @@ export default {
     ProgressBar
   },
   props: {
-    canvas: Object
+    id: String,
+    canvas: Object,
   },
   data() {
     return {

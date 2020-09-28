@@ -57,3 +57,15 @@ a {
 }
 
 @tailwind utilities;
+
+
+/* Openseadragon */
+
+@media print {
+  .openseadragon-canvas + div {
+    display: none;
+  }
+  .navigator {
+    display: none !important;
+  }
+}

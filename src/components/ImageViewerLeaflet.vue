@@ -5,7 +5,8 @@
 <script>
 export default {
   props: {
-    canvas: Object
+    id: String,
+    canvas: Object,
   },
   data() {
     return {

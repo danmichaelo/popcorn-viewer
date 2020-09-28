@@ -1,0 +1,3 @@
+[submodule "openseadragon-flat-toolbar-icons"]
+	path = openseadragon-flat-toolbar-icons
+	url = https://github.com/peterthomet/openseadragon-flat-toolbar-icons.git

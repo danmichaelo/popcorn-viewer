@@ -1,11 +1,15 @@
 <template>
-  <div class="flex flex-col min-h-full sm:h-full">
+  <div class="flex flex-col app-container">
 
-    <h1 class="bg-gray-900 px-4 py-3">
-      <a href="../index.html" @click.prevent="loadManifest('')">Alma Digital IIIF test</a>
+    <h1 class="bg-gray-900 px-4 py-3 text-white">
+      <a v-if="collection" href="./" @click.prevent="loadManifest('')">{{ collection.label }}</a>:
+      {{ manifest ? manifest.label : '' }}
+      <!--
+      <a href="../index.html" @click.prevent="loadManifest('')">Popp</a>
+      -->
     </h1>
 
-    <div class="pt-6 pb-3 bg-white border-b border-gray-400">
+    <div v-if="!loading && !manifest" class="pt-6 pb-3 bg-white border-b border-gray-400">
       <div class="max-w-6xl px-3 mx-auto">
         <form
           class="flex flex-row flex-sm-col items-baseline"
@@ -28,7 +32,7 @@
       </div>
     </div>
 
-    <div class="bg-gray-200 flex-grow flex flex-col h-full overflow-auto">
+    <div class="bg-gray-800 flex-grow flex flex-col h-full-except-print"><!-- flex-grow flex flex-col h-full overflow-auto -->
 
       <div v-if="loading" class="px-6 py-8 text-gray-500">Loading manifest...</div>
 
@@ -36,9 +40,16 @@
         Could not find an Alma Digital representation with ID "{{ representation }}".
       </div>
 
-      <manifest-viewer v-if="manifest" :manifest="manifest" class="flex-grow h-full overflow-auto"></manifest-viewer>
+      <manifest-viewer 
+        v-if="manifest" 
+        :id="representation"
+        :manifest="manifest" 
+        class="flex-grow h-full-except-print"
+      ></manifest-viewer>
 
-      <div v-if="manifest" class="px-3 py-2 text-sm bg-teal-500 text-white text-center">
+      <!--
+
+      <div v-if="manifest" class="dont-print px-3 py-2 text-sm bg-teal-500 text-white text-center">
         Note: If tiles fail to load, it's most likely because the URLs are inactive.
         This is a known bug that we have reported to Ex Libris.
         To re-active the URL, visit
@@ -49,9 +60,33 @@
         >Alma Universal Viewer</a>.
         Then wait a few seconds and reload this page.
       </div>
+      -->
     </div>
   </div>
 </template>
+
+<style>
+@media only screen {
+  .h-full-except-print {
+    height: 100%;
+    overflow: auto;
+  }
+  .app-container {
+    min-height: 100%;
+  } 
+}
+@media only screen and (min-width: 768px) {
+  .app-container {
+    height: 100%;
+  }
+}
+@media print {
+  .dont-print {
+    display: none;
+  }
+}
+
+</style>
 
 <script>
 import axios from 'axios'
@@ -63,6 +98,9 @@ export default {
   },
   data() {
     return {
+      collection: {
+        label: 'Norske epitafier 1550–1700',
+      },
       loading: false,
       representation: null,
       representation_input: '',
@@ -119,13 +157,10 @@ export default {
         return
       }
 
-      console.log('Load manifest for represenation: ' + this.representation)
       const http = axios.create({ credentials: true })
 
       this.loading = true
       this.manifest = null
-
-      
 
       // Get IIIF Manifest
       http
@@ -134,7 +169,6 @@ export default {
         )
         .then(res => res.data)
         .then(manifest => {
-          console.log(manifest)
           this.manifest = manifest
           this.loading = false
         })
@@ -142,7 +176,7 @@ export default {
           this.error = err
           this.loading = false
         })
-    }
+    },
   },
   mounted() {
     const searchParams = new URLSearchParams(document.location.search)
